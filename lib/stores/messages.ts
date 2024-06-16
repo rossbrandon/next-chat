@@ -1,5 +1,6 @@
 import { User } from '@supabase/supabase-js'
 import { create } from 'zustand'
+import { MESSAGE_PAGE_SIZE } from '../constants'
 
 export type Message = {
   created_at: string
@@ -16,17 +17,22 @@ export type Message = {
 }
 
 interface MessageState {
+  page: number
+  hasMorePages: boolean
   messages: Message[]
   actionMessage: Message | undefined
   optimisticIds: string[]
-  addMessage: (message: Message) => void
+  addMessage: (newMessage: Message) => void
+  addManyMessages: (newMessages: Message[]) => void
+  addOptimisticId: (messageId: string) => void
   setActionMessage: (message: Message | undefined) => void
   optimisticDeleteMessage: (messageId: string) => void
-  optimisticUpdateMessage: (message: Message) => void
-  addOptimisticId: (id: string) => void
+  optimisticUpdateMessage: (updatedMessage: Message) => void
 }
 
 export const useMessage = create<MessageState>()((set) => ({
+  page: 1,
+  hasMorePages: false,
   messages: [],
   actionMessage: undefined,
   optimisticIds: [],
@@ -34,9 +40,15 @@ export const useMessage = create<MessageState>()((set) => ({
     set((state) => ({
       messages: [...state.messages, newMessage],
     })),
-  addOptimisticId: (id) =>
+  addManyMessages: (newMessages) =>
     set((state) => ({
-      optimisticIds: [...state.optimisticIds, id],
+      messages: [...newMessages, ...state.messages],
+      page: state.page + 1,
+      hasMorePages: newMessages.length >= MESSAGE_PAGE_SIZE,
+    })),
+  addOptimisticId: (messageId) =>
+    set((state) => ({
+      optimisticIds: [...state.optimisticIds, messageId],
     })),
   setActionMessage: (message) => set(() => ({ actionMessage: message })),
   optimisticDeleteMessage: (messageId) =>

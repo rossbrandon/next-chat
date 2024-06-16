@@ -3,7 +3,6 @@
 import React, { useState } from 'react'
 import { supabaseBrowser } from '@/lib/supabase/browser'
 import { toast } from 'sonner'
-import { v4 as uuid } from 'uuid'
 import { useUser } from '@/lib/stores/user'
 import { Message, useMessage } from '@/lib/stores/messages'
 import { Textarea } from './ui/textarea'
@@ -11,9 +10,9 @@ import { Button } from './ui/button'
 
 export default function ChatInput() {
   const [text, setText] = useState<string | undefined>()
-  const user = useUser((state) => state.user)
+  const { user } = useUser()
   const { messages, addMessage, addOptimisticId, setActionMessage } =
-    useMessage((state) => state)
+    useMessage()
 
   const supabase = supabaseBrowser()
 

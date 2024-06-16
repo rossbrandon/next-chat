@@ -16,10 +16,8 @@ import { supabaseBrowser } from '@/lib/supabase/browser'
 import { toast } from 'sonner'
 
 export function DeleteAlert() {
-  const actionMessage = useMessage((state) => state.actionMessage)
-  const optimisticDeleteMessage = useMessage(
-    (state) => state.optimisticDeleteMessage
-  )
+  const { actionMessage } = useMessage()
+  const { optimisticDeleteMessage } = useMessage()
 
   const handleDelete = async () => {
     const supabase = supabaseBrowser()

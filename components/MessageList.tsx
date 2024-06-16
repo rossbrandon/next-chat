@@ -8,6 +8,7 @@ import { EditAlert } from './EditAlert'
 import { supabaseBrowser } from '@/lib/supabase/browser'
 import { toast } from 'sonner'
 import { ArrowDown } from 'lucide-react'
+import LoadMoreMessages from './LoadMoreMessages'
 
 export default function MessageList() {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>
@@ -19,7 +20,7 @@ export default function MessageList() {
     addMessage,
     optimisticDeleteMessage,
     optimisticUpdateMessage,
-  } = useMessage((state) => state)
+  } = useMessage()
   const supabase = supabaseBrowser()
 
   // Subscribe to realtime changes from Supabase
@@ -120,7 +121,9 @@ export default function MessageList() {
         ref={scrollRef}
         onScroll={handleScroll}
       >
-        <div className="flex-1"></div>
+        <div className="flex-1 pb-5">
+          <LoadMoreMessages />
+        </div>
         <div className="space-y-7">
           {messages.map((message, index) => {
             return <ChatMessage key={index} message={message} />

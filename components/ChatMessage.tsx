@@ -5,7 +5,7 @@ import MessageMenu from './MessageMenu'
 import { useUser } from '@/lib/stores/user'
 
 export default function ChatMessage({ message }: { message: Message }) {
-  const user = useUser((state) => state.user)
+  const { user } = useUser()
 
   return (
     <div className="flex gap-2">

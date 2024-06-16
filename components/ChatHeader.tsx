@@ -5,6 +5,9 @@ import { Button } from '@/components/ui/button'
 import { supabaseBrowser } from '@/lib/supabase/browser'
 import { User } from '@supabase/supabase-js'
 import { useRouter } from 'next/navigation'
+import { Github } from 'lucide-react'
+import ChatPresense from './ChatPresense'
+import { FaGoogle } from 'react-icons/fa'
 
 export default function ChatHeader({ user }: { user: User | null }) {
   const router = useRouter()
@@ -13,6 +16,15 @@ export default function ChatHeader({ user }: { user: User | null }) {
   const handleLoginWithGithub = () => {
     supabase.auth.signInWithOAuth({
       provider: 'github',
+      options: {
+        redirectTo: location.origin + '/auth/callback',
+      },
+    })
+  }
+
+  const handleLoginWithGoogle = () => {
+    supabase.auth.signInWithOAuth({
+      provider: 'google',
       options: {
         redirectTo: location.origin + '/auth/callback',
       },
@@ -29,15 +41,21 @@ export default function ChatHeader({ user }: { user: User | null }) {
       <div className="p-5 border-b flex items-center justify-between h-full">
         <div>
           <h1 className="text-xl font-bold">Daily Chat</h1>
-          <div className="flex items-center gap-1">
-            <div className="h-4 w-4 bg-green-500 rounded-full animate-pulse"></div>
-            <h1 className="text-sm text-gray-400">2 online</h1>
-          </div>
+          <ChatPresense />
         </div>
         {user ? (
           <Button onClick={handleLogout}>Logout</Button>
         ) : (
-          <Button onClick={handleLoginWithGithub}>Login</Button>
+          <div className="flex gap-1">
+            <Button onClick={handleLoginWithGithub} className="gap-1">
+              <Github size={22} />
+              Login with Github
+            </Button>
+            <Button onClick={handleLoginWithGoogle} className="gap-2">
+              <FaGoogle size={20} />
+              Login with Google
+            </Button>
+          </div>
         )}
       </div>
     </div>

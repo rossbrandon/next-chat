@@ -13,7 +13,7 @@ import { MoreHorizontal } from 'lucide-react'
 import { Message, useMessage } from '@/lib/stores/messages'
 
 export default function MessageMenu({ message }: { message: Message }) {
-  const setActionMessage = useMessage((state) => state.setActionMessage)
+  const { setActionMessage } = useMessage()
 
   return (
     <DropdownMenu>

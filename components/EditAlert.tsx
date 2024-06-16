@@ -17,10 +17,8 @@ import { Textarea } from '@/components/ui/textarea'
 
 export function EditAlert() {
   const [text, setText] = useState<string | undefined>()
-  const actionMessage = useMessage((state) => state.actionMessage)
-  const optimisticUpdateMessage = useMessage(
-    (state) => state.optimisticUpdateMessage
-  )
+  const { actionMessage } = useMessage()
+  const { optimisticUpdateMessage } = useMessage()
 
   const handleEdit = async () => {
     const supabase = supabaseBrowser()
